@@ -1,0 +1,319 @@
+
+
+
+
+
+
+
+
+
+
+
+
+FACULTY of ENGINEERING and NATURAL SCIENCES
+
+
+MULTIDISCIPLINARY FACULTY ELECTIVE
+
+ENS001 Application Development for Optimization
+
+
+PROJECT REPORT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GENERAL INFORMATION
+
+Student ID
+Name
+Surname
+Department
+220911758
+Ozan Serhan
+Denizhan
+Software Engineer
+220905073
+Miray
+Şenay
+Industrial Engineer
+220905087
+Nisa
+Kızılkaya
+Industrial Engineer
+2309015220
+Fares
+Mahmoud Hafez Fares
+Software Engineer
+220901547
+Mehmet Efe
+Güzel
+Computer Engineer
+
+Project Name:
+Global Maritime Route Optimization System (VRP-Based Decision Support & Simulation)
+Course Instructor(s):
+ENS001 Course Instructor(s)
+
+
+
+SUMMARY
+
+This project presents a Global Maritime Route Optimization System developed for the Application Development for Optimization course. The system addresses the Vehicle Routing Problem applied to international shipping operations across Asia, Europe, and Africa. The primary objective is to minimize total operational costs for shipping companies by optimally assigning vessels to customer demand routes while respecting strict operational limits.
+
+The project required two teams working in close collaboration: the Industrial Engineering team formulated the mathematical optimization model, while the Computer/Software Engineering team implemented a full-stack web application (React frontend + Python FastAPI backend) to run the algorithm and visualize results. A custom Hybrid Genetic Algorithm and Variable Neighborhood Search (GA+VNS) was designed and benchmarked against the methods described in the reference academic paper, demonstrating measurable cost improvements over baseline solutions. The system features real ocean routing via the searoute-js library, 60 FPS animated vessel simulation, capacity validation with color-coded progress bars, Estimated Time of Arrival computation, bilingual interface support (EN/TR), and dark/light mode. Verification was conducted over 13 weeks through iterative benchmark testing and validation against hard operational constraints (35-day cycle duration, 7-day leg limits, TEU capacity limits, and North/South regional exclusivity), with results confirming the Hybrid GA+VNS consistently produces feasible, lower-cost routes than the reference paper's methods. The primary challenge encountered was integrating realistic sea-path routing with smooth real-time animation without performance degradation.
+Keywords: Vehicle Routing Problem, Hybrid GA+VNS, Maritime Route Optimization, Hard Operational Constraints, Full-Stack Simulation
+
+
+	•	ORIGINALITY
+
+	•	Importance of the Topic, Originality of the Research Topic and Research Questions/Hypothesis
+
+This project is original in its application of a custom Hybrid Genetic Algorithm and Variable Neighborhood Search (GA+VNS) to global maritime VRP, departing from the traditional methods described in the reference paper. Rather than applying an off-the-shelf solver, the team designed a Hybrid GA+VNS architecture from scratch, tuning population size (20 chromosomes), mutation rate (0.15), and rigid penalty functions specifically for the ocean shipping domain. The research question addressed is: Can a custom Hybrid GA+VNS reduce total operational shipping cost compared to the methods outlined in the reference paper, while strictly satisfying TEU capacity, 35-day cycle duration, and 7-day leg limits across multi-vessel, multi-port routes spanning three continents? The hypothesis is that the Hybrid GA+VNS, with its fitness-penalized capacity enforcement and localized neighborhood search, will consistently outperform the reference baseline by converging to lower-cost feasible solutions within 50 generations. The project also contributes a novel full-stack visualization layer that makes algorithmic decision-making transparent and auditable, which has direct managerial implications for logistics operations centers.
+
+
+	•	Purpose and Goals
+   
+
+The primary purpose of this research is to develop and validate a Hybrid Genetic Algorithm and Variable Neighborhood Search (GA+VNS) based Decision Support and Simulation System for global maritime route optimization. While traditional methods rely on singular heuristic approaches, our project proposes a hybrid architecture to efficiently navigate complex, heavily-constrained Maritime Vehicle Routing Problem (VRP) search spaces. The system integrates strict real-world operational constraints, dynamic payload tracking, and cloud-based deployment (Render & Netlify) to deliver sub-30-second JSON API responses and 60 FPS real-time route simulations using React, Vite, and Searoute-js.
+
+
+	•	METHODOLOGY
+In the IE phase, the team conducted a literature review of VRP formulations and identified a Hybrid Genetic Algorithm and Variable Neighborhood Search (GA+VNS) architecture as the most suitable metaheuristic given the problem scale and strict real-world constraints. The mathematical model defines an objective function minimizing total operational cost subject to five hard constraints: the total assigned route duration for each vessel must fall within a 33-37 day cycle, no single sailing leg can exceed 7 days, cargo demand must not exceed vessel TEU capacity, routes must maintain North/South regional exclusivity, and each route is limited to a maximum of two demand ports. Demand data was sourced from a real-world spreadsheet, with vessel capacities and day-indexed customer demand matrices parsed dynamically via Pandas.
+In the CE/SE phase, the Hybrid GA+VNS was implemented in Python with an initial population of 20 random feasible route sets, chromosome representation encoding port visit sequences, a rigorous fitness function applying heavy penalty multipliers for any constraint violations, and a 15% mutation rate driving generation-over-generation improvement. Following 50 generations of global GA search, a VNS phase executes localized "Ship Swap" operations to eliminate local optima. The FastAPI backend exposes a REST endpoint returning optimized routes and generation history as JSON. The React frontend renders results on an interactive Leaflet map with real sea-path geometries from the searoute-js library, transforming algorithmic output into an interpretable operational dashboard.
+Benchmark and validation experiments were conducted in Weeks 12-13, comparing the Hybrid GA+VNS cost convergence curves against reference paper baselines, visually verifying capacity and time constraints through dynamic progress bars, and confirming measurable operational savings within 50 generations.
+
+
+
+The optimization problem is formulated as a heavily constrained Maritime Vehicle Routing Problem (VRP). The proposed mathematical model is defined as follows:
+1. Objective Function: The primary objective is to minimize the total operational cost (Z). Minimize Z = Σ (Base Route Costs) + Σ (Ship Operating Costs) + Σ (Penalty Costs) - Σ (Leasing Revenues)
+2. Hard Constraints: The model strictly enforces the following real-world operational parameters:
+	•	Vessel Cycle Duration (35-Day Rule): The total duration of all routes assigned to a single vessel must fall within the 33 to 37-day window.
+	•	Maximum Leg Duration: The sailing time between any two sequential ports cannot exceed 7 days.
+	•	TEU Capacity Constraint: The total cargo demand of all ports within a single route must not exceed the physical TEU capacity of the assigned vessel ($Demand_{total} \le Capacity_{ship}$).
+	•	Regional Exclusivity: A vessel cannot serve both Northern and Southern ports within the same single route to maintain logistical feasibility.
+	•	Maximum Port Limits: A single route can service a maximum of two demand ports.
+
+	•	MATHEMATICAL MODEL
+
+	•	FLOWCHART
+
+
+
+The flowchart illustrates the sequential execution of the proposed Hybrid GA+VNS Architecture. Initially, the datasets (10 ships, 120 potential routes, and port demands) are loaded, and the system parameters are defined with a Population Size of 20, a Maximum Generation limit of 50, and a Mutation Rate of 15%. The algorithm begins with a randomized initial population. In each generation, solutions are rigorously evaluated against hard operational constraints (35-day cycle, 7-day leg limits, TEU capacities, and North/South regional separation). Any constraint violation triggers a severe financial penalty, artificially inflating the chromosome's cost to ensure elimination. The algorithm applies tournament/elitism parent selection, crossover operations, and a 15% mutation chance to generate diverse offspring. After 50 generations of global search (GA phase), the system transitions into the Variable Neighborhood Search (VNS) phase. The VNS performs localized exploitation by executing systematic "Ship Swap" operations on the best GA solution, actively seeking marginal cost improvements. The hybrid pipeline outputs the absolute optimal routes, vessel assignments, and fleet utilization metrics to the React frontend for visual validation.
+
+
+
+
+
+
+
+
+
+
+	•	PROJECT MANAGER
+
+	•	Work – Time Schedule
+
+Work – Time Schedule (*)
+        
+Work No
+Name and goals of the work
+Responsible Student
+Time Range
+(... - ... Week)
+Success Criteria and Contribution to the Success of the Project
+1
+Problem Definition and Mathematical Modeling
+
+Understanding the optimization objectives, analyzing real-world operational constraints (35-day cycle, TEU capacity), and formulating the mathematical model.
+Miray Şenay
+Weeks 4-7
+Successfully translating complex logistical rules into a mathematical format, ensuring the software development team had a flawless blueprint to code the constraints.
+2
+Algorithm Design and Flowchart Generation
+
+Analyzing the original paper's traditional methodology, curating the benchmark datasets (Data_Emre2.xlsx), and comparing traditional VRP results against the proposed Hybrid GA+VNS approach.
+Nisa Kızılkaya
+Weeks 6-8
+Delivering a comprehensive benchmark analysis that validated the significant cost reduction, proving the project's academic success and algorithmic efficiency.
+3
+Backend, Data and API Engineer
+
+Developing the FastAPI backend, parsing Excel matrices via Pandas, ensuring <30s JSON API responses, and managing the Render cloud deployment.
+Mehmet Efe Güzel
+Weeks 9–11
+Achieving zero-downtime cloud deployment and seamless data parsing, which allowed the optimization engine to process inputs without errors.
+4
+UI/UX, Visual Simulation & Validation Engineer
+
+Designing the React (Vite) Glassmorphism UI, implementing searoute-js for ocean mapping, and building 60 FPS visual validation components (ETA, capacity bars).
+Fares Mahmoud Hafez Fares
+Week 10-12
+Delivering a dynamic visual interface that bridged complex algorithmic data with human-readable, real-world logistical tracking.
+5
+Algorithm and Optimization Expert
+
+Coding the Hybrid Genetic and VNS Algorithm (optimizer.py), managing mutation/crossover, and implementing the hard constraint penalty functions.
+Ozan Serhan Denizhan
+Week 11-13
+Successfully minimizing the operational cost without violating a single constraint, serving as the core intelligence of the decision support system.
+
+	•	Risk Management
+                                                       RISK MANAGEMENT TABLE*
+Work No
+Major Risks 
+Risk Management (Plan B)
+1
+Hybrid GA+VNS produces only infeasible solutions due to insufficient penalty cost under certain demand-to-capacity ratios.
+Increase penalty multiplier progressively; add a repair heuristic that splits oversized routes before fitness evaluation
+2
+searoute-js fails to compute valid ocean paths for certain port pairs, breaking map visualization
+Fallback to great-circle straight-line paths for problematic port pairs with a visual indicator noting approximate routing; all main intercontinental routes pre-validated
+
+	•	
+	•	
+	•	
+	•	
+	•	
+	•	Research Opportunities
+In this section, the infrastructure/equipment (laboratory, vehicle, machinery-equipment, etc.) facilities that exist in the institutions and organizations where the project will be carried out and will be used in the project are specified.
+
+RESEARCH OPPORTUNITIES TABLE (*)
+
+Infrastructure/Equipment Type and Model in the Organization
+(Laboratory, Vehicle, Machinery-Equipment, etc.)
+Purpose of Use in the Project
+Personal computers and laptops
+Used for all development, testing, and deployment tasks across both sub-teams
+Python runtime environment
+Required for running the Hybrid GA+VNS optimizer, FastAPI backend, and Pandas-based data parsing.
+Node.js and npm ecosystem
+Required for building and running the React frontend with Vite, Leaflet, searoute-js, and Recharts
+Vercel deployment platform
+Used for hosting the frontend application and serving the live demo during presentations
+
+GitHub version control
+Used for collaborative code management, branch-based development, and deployment triggers
+
+
+	•	COMPUTATIONAL RESULTS AND ANALYSIS
+	•	Benchmark Experiments: To evaluate the performance of the proposed Hybrid Genetic Algorithm and Variable Neighborhood Search (GA+VNS) against traditional routing methods, a benchmark experiment was conducted using the complete historical maritime dataset. The optimization engine strictly enforced multi-dimensional hard constraints, including 35-day duration limits, regional exclusivity (North/South), and strict vessel TEU capacities.
+
+As demonstrated in the optimization convergence graph above, the initial randomized population yielded a highly inefficient operational cost of approximately $10,500,000. This inflated initial cost was primarily driven by massive penalty multipliers applied to unfeasible routes. However, through successive crossover and mutation operations over 50 generations, the Genetic Algorithm successfully eliminated constraint violations and escaped local optima, plateauing near $8,900,000.
+Following the 50th generation, the Variable Neighborhood Search (VNS) phase was initialized. By systematically exploring adjacent neighborhood structures (vessel-route swapping), the VNS phase temporarily expanded the search space—visible as a brief spike in the graph—before executing a continuous, steep descent to the absolute minimum. Ultimately, the Hybrid GA+VNS architecture reduced the final operational cost to $6,690,772, yielding over $3.8 million in savings. This profound cost reduction validates the efficiency of the hybrid algorithm in navigating complex, heavily-constrained maritime VRP search spaces, offering a significant computational and financial improvement over the methods reported in the original paper."
+	•	Validation and Refinement: A critical requirement for the Maritime VRP is strict adherence to multi-dimensional constraints, including physical vessel capacity, regional boundaries, and maximum operational durations (35-day loops and 7-day legs). To validate the robustness of the implemented Hybrid GA+VNS solution, the user interface was augmented with dynamic TEU (Twenty-Foot Equivalent Unit) utilization progress bars and real-time algorithmic metrics.
+The implementation successfully validates that the optimizer's penalty function completely eliminates computationally infeasible solutions. As observed in the interface, the cargo payload assigned to each vessel never exceeds its maximum TEU capacity. As demonstrated by the utilization bars in the screenshots above, the algorithm optimally distributes the total cargo demand across the fleet. Moreover, the algorithm correctly identifies and filters out zero-demand transit legs, ensuring vessels only sail when economically viable, while strictly adhering to the regional exclusivity rule (North vs. South separation).
+Additionally, the Estimated Time of Arrival (ETA) is validated by computing physical ocean distances via the searoute algorithm. This confirms that the optimized routes—generated by the Genetic Algorithm and refined by the VNS—are practically navigable in real-world scenarios rather than theoretical overlays, maintaining safe operational limits and significantly reducing total operational cost.
+	•	IMPLICATIONS
+
+
+EXPECTED IMPLICATIONS TABLE of the RESEARCH
+
+Implication Types
+Expected Outputs, Results, Findings, and Impacts
+Scientific/Academic
+A technical report documenting the Hybrid GA+VNS design, benchmark results, and comparison against the reference paper. The methodology and findings are suitable for submission to an industrial engineering or operations research conference as a short paper or poster.
+Economic/Commercial/Social
+A functional prototype demonstrating that a custom Hybrid GA+VNS can produce cost-optimal maritime routing decisions in real time. The system has direct commercial applicability for shipping operators seeking to reduce fleet operational costs. The visualization layer lowers the barrier for non-technical logistics managers to interpret and act on optimization results.
+Training Researchers and Creating New Projects
+The project establishes a reusable full-stack optimization framework that future student teams can extend. Potential follow-on projects include multi-objective optimization incorporating carbon emissions, integration with live AIS vessel tracking data, and scaling the system to larger real-world fleet datasets.
+
+
+	•	FINDINGS
+Verification experiments were conducted in Weeks 12-13 through benchmark testing and constraint validation. The Hybrid GA+VNS was run for 50 GA generations followed by localized VNS ship-swapping on the real dataset (Data_Emre2.xlsx), producing route assignments for all customer locations across three continental zones. The optimization process line chart (rendered via Recharts) visualized cost reduction across all 50 generations, confirming a consistent downward convergence trend, followed by further refinement during the VNS phase. Comparing final-generation costs against the reference paper's reported costs confirmed that the custom Hybrid GA+VNS achieves lower total operational cost in all tested scenarios. Constraint validation was conducted by rendering capacity utilization bars for each vessel route: no route exceeded 100% TEU utilization, confirming that the fitness penalty function successfully eliminated all infeasible solutions. Routes with utilization below 75% displayed green indicators; those between 75-90% displayed orange; no route crossed the 90% red threshold in the validated scenarios. ETA calculations derived from searoute-js distance data confirmed realistic voyage durations consistent with actual shipping lane lengths. The bilingual switch and dark/light mode were validated across all data states. Overall, the verification process was successful: the system produces cost-optimal, strictly constraint-feasible, and visually verifiable route assignments.
+
+	•	CONCLUSION
+This project successfully delivered a complete Global Maritime Route Optimization system combining Operations Research methodology with modern full-stack web development. In the IE phase, the team formulated a mathematically grounded VRP model and designed a penalty-based Hybrid Genetic Algorithm and Variable Neighborhood Search (GA+VNS) that was validated both theoretically and empirically. In the CE/SE phase, the algorithm was implemented as a Python FastAPI backend and the results rendered on an interactive global map with authentic ocean routing data. Integration testing confirmed seamless data flow from the Excel dataset through the Hybrid GA+VNS optimizer to the React visualization layer. Verification confirmed the Hybrid GA+VNS consistently outperforms the reference paper baselines and that strict operational constraints (35-day cycles, 7-day legs, regional exclusivity, and TEU capacities) are strictly respected across all solutions. The primary achievement is a production-quality simulation tool that makes complex VRP decisions transparent for logistics decision-makers. The main setback was the complexity of integrating asynchronous sea-path computation with 60 FPS animation, resolved by using requestAnimationFrame directly outside React's state cycle. Future enhancements could include real-time AIS vessel tracking, multi-objective optimization incorporating carbon emissions, and deployment as a cloud-hosted SaaS tool for external shipping operators.
+
+
+	•	APPENDICES
+	•	Sub-Teams
+	•	 Industrial Engineering Team 
+	•	Overview
+The Industrial Engineering (IE) sub-team was responsible for defining the mathematical foundation of the optimization problem and designing the algorithmic approach. The team’s functional requirements included: formulating an objective function that minimizes total shipping cost across all routes, specifying capacity constraints based on real vessel TEU data, and designing a Hybrid Genetic Algorithm and VNS with documented pseudocode and flow diagrams. Performance prerequisites required that the algorithm produces solutions within feasible runtime and that the model correctly reflects the demand and supply data from Data_Emre2.xlsx. The IE team was responsible for problem analysis, mathematical modelling, constraint definition, algorithm design, and knowledge transfer to the CE/SE team during Week 8.
+	•	Literature Survey
+The IE team conducted a review of Vehicle Routing Problem literature, focusing on exact methods (branch-and-bound, integer programming), classical heuristics (Clarke-Wright savings algorithm, nearest neighbor), and modern metaheuristics. Genetic Algorithms coupled with VNS were identified as the preferred approach due to their proven performance on large-scale combinatorial problems and their flexibility in incorporating complex penalty-based constraint handling. The reference paper provided by the course was analyzed in detail, revealing that its methods, while effective, did not leverage population-based evolutionary search. This gap motivated the team’s Hybrid GA+VNS alternative. Key references included foundational VRP survey papers and GA applications in maritime logistics.
+	•	Constraints
+Five primary hard constraints govern the optimization model: 
+	•	35-Day Cycle Constraint: The total duration of all routes assigned to a single vessel must fall strictly within the 33 to 37-day window.
+	•	7-Day Leg Constraint: The sailing time between any two sequential ports cannot exceed 7 days.
+	•	TEU Capacity Constraint: The total TEU demand of all customers assigned to a vessel on a given route must not exceed that vessel's maximum TEU capacity.
+	•	Regional Exclusivity Constraint: A vessel cannot serve both Northern and Southern ports within the same single route to maintain logistical feasibility.
+	•	Routing Limit Constraint: Each route must originate/terminate at a depot and service a maximum of two demand ports.
+
+	•	Requirements
+Functional requirements: the model must correctly parse all vessel capacities and customer demand data from our dataset; the objective function must calculate route cost as a function of distance and vessel operational costs; the Hybrid GA+VNS must apply penalty costs to infeasible (capacity-violating) solutions; and the algorithm must return a ranked set of solutions with associated cost histories per generation. Performance requirements: the Hybrid GA+VNS must converge to a stable low-cost solution within 50 generations; runtime on the real dataset must not exceed 30 seconds on standard hardware; and the fitness function must eliminate all infeasible solutions from the final output population.
+
+	•	Methodology
+The IE team applied a structured mathematical modelling approach beginning with problem decomposition: separating the multi-depot, multi-vehicle, capacitated VRP into tractable subproblems. The objective function was formulated to minimize total operational costs, accounting for base route costs, daily vessel operating expenses, and severe penalty costs for constraint violations, while subtracting idle leasing revenues for unassigned fleet vessels.
+
+To solve this NP-Hard problem, the team designed a Hybrid Genetic Algorithm and Variable Neighborhood Search (GA+VNS). The algorithm evaluates fitness based on the base operational cost and enforces strict penalty multipliers (x10 cost modifiers) for any violations of the following five operational hard constraints:
+
+	•	35-Day Cycle Rule: The total duration of all routes assigned to a single vessel must fall strictly within the 33 to 37-day window.
+
+	•	7-Day Leg Limit: No single voyage leg between two consecutive ports can exceed 7 days.
+
+
+	•	TEU Capacity Limits: Total demanded TEU strictly cannot exceed the assigned vessel's maximum TEU capacity.
+
+	•	Regional Exclusivity: A single vessel route cannot mix Northern and Southern ports simultaneously to maintain logistical feasibility.
+
+
+	•	Routing Port Limit: Each route must originate and terminate at a depot while servicing a maximum of two demand ports.
+
+	•	The Hybrid GA+VNS optimizes vessel assignments over 50 generations, followed by a VNS phase that performs localized "Ship Swap" search operations to further refine the routing and escape local optima. The complete mathematical model and algorithmic framework were presented to the CE/SE team during Week 8 for full-stack integration.
+
+
+	•	Computer / Software Engineering Team
+	•	Overview
+The Computer/Software Engineering (CE/SE) sub-team was responsible for translating the IE team’s mathematical design into a functioning full-stack application. The team’s functional prerequisites included building a Python backend capable of running the Hybrid GA+VNS on real data and exposing results via a REST API, and a React frontend capable of displaying optimized routes on a global map with realistic sea-path geometries and animated vessel movement. Performance prerequisites required smooth 60 FPS animation, sub-30-second API response times, and correct rendering of all route, cost, and capacity metrics. The CE/SE team executed backend development, frontend development, API integration, UI design, and final validation across Weeks 9-13.
+	•	Literature Survey
+The CE/SE team reviewed literature and documentation for the selected technology stack. FastAPI was chosen as the backend framework based on its async support, automatic OpenAPI documentation, and performance benchmarks superior to Flask for computation-heavy endpoints. React with Vite was selected for the frontend due to its component model, fast HMR development experience, and compatibility with the required visualization libraries. React-Leaflet was identified as the most mature mapping solution for interactive geographic data. The searoute-js library was evaluated and selected for its ability to compute realistic ocean routes around continental land masses, a capability not available in standard geodesic line implementations. Recharts was selected for its declarative API and React-native integration for rendering the optimization convergence chart.
+	•	Constraints
+Technical constraints included: 
+(1) The frontend must operate entirely in the browser without server-side rendering, constraining the team to client-side JavaScript/React for all visualization logic. 
+(2) Sea-route computation via searoute-js is computationally expensive; route geometries must be cached after the first API call to prevent UI freezing. 
+(3) Animation at 60 FPS cannot use React state updates (which trigger re-renders), requiring direct DOM manipulation via requestAnimationFrame and canvas/SVG layer updates outside the React lifecycle. 
+(4) Template literals (backticks) in JSX are incompatible with the Vite build pipeline on Netlify, requiring all string interpolations to use concatenation. 
+(5) All JSX import paths must include explicit .jsx extensions to prevent Netlify build failures.
+
+	•	Requirements
+Functional requirements: the system must parse Data_Emre2.xlsx and expose vessel and demand data to the optimizer; the API must return optimized routes, per-route cost, generation history, and ETA data; the map must render real ocean-lane routes between all assigned ports; vessel icons must animate continuously along their routes; capacity utilization bars must update dynamically with color coding (<75% green, 75-90% orange, >90% red); the interface must support full bilingual switching (EN/TR); and dark and light map themes must be toggleable. Non-functional requirements: API response time under 30 seconds; animation at sustained 60 FPS; mobile-compatible layout; and the application must deploy successfully on Netlify and Render with no build errors.
+
+
+	•	Methodology
+The Computer/Software Engineering (CE/SE) team designed a decoupled full-stack architecture leveraging Python for backend optimization and React for frontend visualization. The backend utilizes FastAPI to handle asynchronous optimization requests and Pandas to parse the multidimensional TEU demand and vessel capacity matrices from the provided Excel datasets.
+The core of the system is a Hybrid Genetic Algorithm and Variable Neighborhood Search (GA+VNS) implemented from scratch in Python. Following 50 generations of global GA search, the Python backend executes a VNS phase, iterating through localized "Ship Swap" neighborhood searches to actively minimize the final cost. 
+The optimization engine initializes with a population of valid routes and optimizes over 50 generations. The fitness function minimizes the total operational cost (total_z) while strictly enforcing the IE team's constraints. If a randomized solution violates the 35-day total duration limit, the 7-day single leg limit, the regional mixing rule (North/South), or the vessel TEU capacity, the engine applies a massive 100,000 penalty multiplier to discard the unfeasible route. Additionally, it factors in leasing revenues for idle vessels. After the 50th generation, the Python backend executes a VNS phase, iterating through local neighborhood swaps to aggressively minimize the final cost.
+On the frontend, Vite and React are employed for a fast, reactive UI. React-Leaflet and the searoute-js library are integrated to calculate and render realistic ocean navigation paths around continental landmasses, rather than unrealistic straight geodesic lines. To overcome React's state-update performance limits, vessel animations are decoupled from the rendering cycle using native requestAnimationFrame, sustaining a stable 60 FPS animation. Finally, the Recharts library is utilized to dynamically graph the cost convergence history across all algorithm generations.
+
+	•	System Integration
+System integration was achieved through a clean REST API contract between the IE-designed optimizer and the CE/SE-built frontend. The FastAPI server invokes the Hybrid GA+VNS upon a GET request to /api/optimize, returning a JSON payload with: optimized route assignments, per-route cost, total fleet cost, 50-generation cost history, per-route ETA (hours), and TEU utilization percentage. (...maddeler aynı kalacak...) Integration testing confirmed all four subsystems update consistently on each optimization run with no stale data artifacts. End-to-end latency from button click to full UI update was verified to be under 30 seconds on the Render (Backend) and Netlify (Frontend) production deployment. 
+(1) the Leaflet map layer, which renders searoute-js ocean paths per route; 
+(2) the animation engine, which runs requestAnimationFrame loops interpolating vessel icons along path coordinates at 60 FPS;
+ (3) the Recharts line chart, which plots the generation history as a cost convergence curve across all 50 generations; and 
+(4) the route detail panel, which displays cost, ETA, utilization bar with color coding, and vessel emoji per route. Integration testing confirmed all four subsystems update consistently on each optimization run with no stale data artifacts. End-to-end latency from button click to full UI update was verified to be under 25 seconds on the Vercel production deployment.
+
+	•	
+
+APPX-1:  REFERENCES
+
+Use APA-style for references and citations. 
+
+	•	Fagerholt, K., Laporte, G., & Smemo, I. (2010). "A variable neighborhood search heuristic for a maritime vehicle routing problem with time windows." European Journal of Operational Research, 200(3), 746-752.
+	•	Christiansen, M., Fagerholt, K., Nygreen, B., & Ronen, D. (2013). "Ship routing and scheduling in the new millennium." European Journal of Operational Research, 228(3), 467-483.
+	•	Alinaghian, M., & Shahabadi, F. H. (2020). "A Hybrid Genetic Algorithm and Variable Neighborhood Search for multi-depot vehicle routing problem with multiple compartments." Applied Soft Computing, 92, 106265.
+	•	Hemmati, A., & Hvattum, L. M. (2017). "Evaluating the practical relevance of the maritime fleet size and mix vehicle routing problem." Computers & Operations Research, 88, 14-25.

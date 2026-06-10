@@ -1,0 +1,7 @@
+fastapi==0.111.0
+uvicorn==0.30.1
+pandas==2.2.2
+openpyxl==3.1.2
+matplotlib>=3.8.0
+python-pptx>=0.6.23
+pulp>=2.8.0

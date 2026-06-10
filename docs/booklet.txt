@@ -1,0 +1,171 @@
+1. Project Objective
+The purpose of this multidisciplinary project is to develop an optimization-based application and propose an improved or alternative solution approach for a real optimization problem presented in an academic article.
+Each student team has been assigned one academic article that presents a specific optimization problem and a solution methodology (algorithm).
+Students will:
+	•	Carefully study and understand the optimization problem, mathematical formulation, and the solution approach described in the assigned article.
+	•	Analyze the algorithm used in the paper and reproduce its main idea if necessary for understanding.
+	•	Design and propose an alternative or improved solution method to solve the same optimization problem. The proposed approach may include:
+	•	improving the original algorithm,
+	•	developing a hybrid algorithm,
+	•	applying a different existing optimization/heuristic/metaheuristic algorithm, or
+	•	proposing a new solution strategy.
+	•	Implement the proposed method in a working software application.
+	•	Test their proposed method using the same benchmark datasets used in the paper.
+	•	Compare their results with those reported in the article and perform benchmark analysis.
+	•	Evaluate whether the proposed method improves solution quality, computational time, or robustness.
+	•	Prepare a final report and presentation demonstrating their methodology, implementation, benchmark comparison, and findings.
+
+The main goal of the project is not simply reproducing the paper's algorithm, but developing and testing a new or improved solution approach for the same optimization problem.
+This project aims to strengthen students’ multidisciplinary teamwork skills, optimization modeling ability, algorithmic reasoning, and innovation in algorithm design.
+
+
+2. Team Structure and Roles
+👷 Industrial Engineering Students
+Responsibilities:
+	•	Understand the optimization problem definition (objectives, constraints, assumptions).
+	•	Formulate the mathematical model based on the paper.
+	•	Analyze the algorithm presented in the paper and develop an alternative or improved solution approach (improved algorithm, hybrid model, or different optimization technique).
+	•	Define the structure and logic of the proposed method and communicate it clearly to the CE/SE teammate before implementation.
+	•	Take full responsibility for the methodology section of the paper — understanding the proposed algorithm, its logic, and parameter definitions.
+	•	Explain the algorithm’s operation to the Computer/Software Engineering teammate and ensure full understanding before implementation.
+	•	Prepare flowcharts or pseudocode describing the algorithm’s structure.
+	•	Conduct analysis of benchmark results (objective values, convergence, comparisons).
+	•	Write the methodological sections of the report.
+*** The Industrial Engineering students play a key role in ensuring that the algorithm is correctly implemented. If they cannot explain the problem and methodology clearly, the application will not work properly — and the entire project will fail for both sides. Collaboration and continuous communication between team members are therefore essential.
+
+💻 Software/Computer Engineering Student
+Responsibilities:
+	•	Translate the algorithm into code based on the Industrial Engineering team’s explanations and pseudocode.
+	•	Develop the implementation using appropriate programming tools.
+	•	Conduct benchmark testing and record computational results.
+	•	Visualize performance metrics (objective trends, runtime, solution quality).
+	•	Document and organize the code for reproducibility.
+	•	Write the implementation part of the report.
+*** The Software Engineering student also carries equal responsibility for the success of the project.If the application is incomplete or does not reflect the algorithm correctly, both sides will be negatively affected. Accurate coding and frequent communication with the Industrial Engineering teammates are therefore critical.
+
+🤝 Joint Tasks (Collaborative Work)
+	•	Work collaboratively throughout all stages of the project.
+	•	Conduct weekly meetings to synchronize modeling and coding progress.
+	•	Validate the algorithm’s correctness using the benchmark dataset.
+	•	Prepare the final report and presentation together.
+	•	Ensure that both modeling and implementation aspects are integrated coherently.
+
+3. Access to Team and Article Files
+	•	The list of teams and assigned articles is uploaded to Blackboard as “ENS001_teams.xlsx.”All students must check this file carefully to confirm their team number and assigned article.
+	•	Each team’s article (PDF) has been uploaded to Blackboard under the “Articles” folder.Each file is named exactly by team number (e.g., Paper-1.pdf, Paper-2.pdf, etc.).
+	•	Students are required to download their team’s article and strictly follow the assigned paper for all analyses and implementation steps.
+
+4. Weekly Schedule (Weeks 4 –15)
+Week
+Focus
+Expected Output / Activity
+4-5
+Project kickoff
+Read and analyze the assigned paper together. Discuss the problem, algorithm, dataset, and clarify each member’s role.
+6
+Problem and model analysis I
+IE students formulate the problem, complete the mathematical model; defining objectives, constraints, and assumptions.
+7
+Problem and model analysis II
+IE students analyze the paper’s algorithm and design a proposed alternative or improved solution method.
+Prepare flowchart/pseudocode.
+8
+Collaboration & knowledge transfer
+IE students finalized the proposed alternative or improved solution method.
+IE students finalize the pseudocode of the proposed algorithm and explain it to the CE/SE student.
+9
+Coding – Phase I
+CE/SE students begin algorithm implementation (core structure and functions).
+10
+Coding – Phase II
+CE/SE students continue coding, run initial tests, and fix logic errors.
+11
+Coding – Phase III
+CE/SE students finalize the implementation of the proposed algorithm and ensure it correctly solves the optimization problem.
+12
+Benchmark testing
+Apply benchmark datasets and compare the obtained results with those reported in the article.
+13
+Validation and refinement
+Adjust parameters; finalize accuracy and performance analysis.
+Evaluate performance of the proposed method (solution quality, runtime, robustness) and analyze whether the new method improves results compared to the original paper.
+14
+Report preparation
+Prepare the final report, include figures and result tables and rehearse presentation.
+Final week
+Final submission and presentation
+Submit the final report and code. Deliver the presentation and live demonstration.
+
+
+
+5. Evaluation and Grading for Final
+
+Criterion
+Description
+Weight (Points)
+Algorithm, Implementation, Validation
+The team proposes a meaningful alternative or improved solution method for the optimization problem. The algorithm is correctly implemented and tested using benchmark datasets. Results are analyzed and compared with those reported in the original article.
+60
+Final Report Quality
+Clarity, organization, and completeness of the report (according to the provided template).
+10
+Presentation and Demo
+Quality of the oral presentation, live demonstration, and ability to explain results.
+20
+Weekly Participation and Collaboration
+Consistent contribution, attendance in meetings, and active teamwork throughout the term.
+10
+Total
+
+100
+
+
+6. Report Format
+A standard report template will later be provided.
+Reports sections will include:
+	•	Introduction and Problem Definition
+	•	Mathematical Model and Problem Description
+	•	Proposed Solution Method
+3.1 explanation of the proposed algorithm
+3.2 improvements or hybrid structure
+3.3 pseudocode / flowchart
+	•	Implementation and Benchmark Experiments
+	•	Benchmark Comparison with the Original Paper
+	•	Discussion and Analysis
+	•	Conclusion
+
+7. Supervision
+To support the progress of the projects, regular academic supervision meetings will be held with the advisor. Due to the high number of teams this year (30 teams), supervision meetings will be organized every two weeks for each team.
+Each meeting will last approximately 10–15 minutes and will provide teams with an opportunity to: ask questions about their project, discuss difficulties related to modeling, algorithms, or implementation, receive guidance for the next steps of their work.
+Supervision meetings will follow the schedule below:
+	•	Teams 1–16 will attend supervision meetings in the first week.
+	•	Teams 17–30 will attend supervision meetings in the following week.
+	•	The cycle will then continue in the same order (Teams 1–16 → Teams 17–30 → …).
+	•	The first round of meetings will start this Thursday with Teams 1–16.
+
+All supervision meetings will take place:
+Day: Thursday
+Location: AB Building – Office 916
+Advisor: Assoc. Prof. Dr. Emre Çakmak
+
+Teams may come at any convenient time during the day on Thursday for a short consultation. If preferred, teams may also send an email beforehand to inform the advisor about their visit time.
+
+
+ 8. Academic Integrity
+	•	Each team member must be able to explain the optimization problem and methodology.
+	•	Plagiarism, or using external code without acknowledgment, is strictly prohibited.
+	•	The goal is to understand the original method and develop an improved or alternative solution approach, not simply reproduce the existing algorithm. 
+	•	Team accountability will be evaluated during the final presentation.
+
+9. Final Presentation (Final Exam)
+Each team will:
+	•	Present for 10-15 minutes, including a live demonstration.
+	•	Cover the problem, model, algorithm, benchmark validation, and results.
+	•	Ensure all members actively participate and answer questions about both modeling and implementation.
+
+
+Good luck,
+Assist. Prof. Dr. Sebla Sezer
+Assos. Prof. Dr. Emre Çakmak
+
+
